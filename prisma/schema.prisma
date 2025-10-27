@@ -12,11 +12,8 @@ datasource db {
 
 model Fechamento {
   id                String            @id @default(cuid())
-  gerenteEstadual   String
   executivo         String
   agencia           String
-  porteAgencia      String?           // PEQUENA, MÉDIA, GRANDE, MEGA
-  gerentePJ         String?           // Nome do Gerente PJ
   qtdVisitas        Int
   qtdInteracoes     Int
   qtdBraExpre       Int

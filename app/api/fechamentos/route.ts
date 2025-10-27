@@ -6,10 +6,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-        const { gerenteEstadual, executivo, agencia, porteAgencia, gerentePJ, qtdVisitas, qtdInteracoes, qtdBraExpre, data, credenciamentos, cnpjsSimulados } = body
+        const { executivo, agencia, qtdVisitas, qtdInteracoes, qtdBraExpre, data, credenciamentos, cnpjsSimulados } = body
 
     // Validação básica
-    if (!gerenteEstadual || !executivo || !agencia || qtdVisitas === undefined || qtdInteracoes === undefined || qtdBraExpre === undefined) {
+    if (!executivo || !agencia || qtdVisitas === undefined || qtdInteracoes === undefined || qtdBraExpre === undefined) {
       return NextResponse.json(
         { error: 'Todos os campos principais são obrigatórios' },
         { status: 400 }
@@ -50,42 +50,39 @@ export async function POST(request: NextRequest) {
 
     try {
       const fechamento = await prisma.fechamento.create({
-      data: {
-        gerenteEstadual,
-        executivo,
-        agencia,
-        porteAgencia: porteAgencia || null,
-        gerentePJ: gerentePJ || null,
-        qtdVisitas: parseInt(qtdVisitas),
-        qtdInteracoes: parseInt(qtdInteracoes),
-        qtdBraExpre: parseInt(qtdBraExpre),
-        data: dataFechamento,
-        credenciamentos: {
-          create: credenciamentosValidos.map((cred: any) => ({
-            qtdCredenciamentos: 1, // Cada credenciamento adicionado = 1 credenciamento
-            ativacoesValor: 0, // Campo removido, sempre 0
-            ec: cred.ec,
-            volumeRS: parseFloat(cred.volumeRS),
-            ra: cred.ra === 'true' || cred.ra === true || cred.ra === 'True' || cred.ra === 'TRUE',
-            cesta: cred.cesta,
-            instalaDireto: cred.instalaDireto === 'true' || cred.instalaDireto === true || cred.instalaDireto === 'True' || cred.instalaDireto === 'TRUE',
-            nomeGerentePJ: cred.nomeGerentePJ || null,
-          }))
+        data: {
+          executivo,
+          agencia,
+          qtdVisitas: parseInt(qtdVisitas),
+          qtdInteracoes: parseInt(qtdInteracoes),
+          qtdBraExpre: parseInt(qtdBraExpre),
+          data: dataFechamento,
+          credenciamentos: {
+            create: credenciamentosValidos.map((cred: any) => ({
+              qtdCredenciamentos: 1, // Cada credenciamento adicionado = 1 credenciamento
+              ativacoesValor: 0, // Campo removido, sempre 0
+              ec: cred.ec,
+              volumeRS: parseFloat(cred.volumeRS),
+              ra: cred.ra === 'true' || cred.ra === true || cred.ra === 'True' || cred.ra === 'TRUE',
+              cesta: cred.cesta,
+              instalaDireto: cred.instalaDireto === 'true' || cred.instalaDireto === true || cred.instalaDireto === 'True' || cred.instalaDireto === 'TRUE',
+              nomeGerentePJ: cred.nomeGerentePJ || null,
+            }))
+          },
+          cnpjsSimulados: {
+            create: cnpjsValidos.map((cnpj: any) => ({
+              cnpj: cnpj.cnpj,
+              nomeEmpresa: cnpj.nomeEmpresa,
+              faturamento: parseFloat(cnpj.faturamento),
+              comentarios: cnpj.comentarios || null,
+            }))
+          }
         },
-        cnpjsSimulados: {
-          create: cnpjsValidos.map((cnpj: any) => ({
-            cnpj: cnpj.cnpj,
-            nomeEmpresa: cnpj.nomeEmpresa,
-            faturamento: parseFloat(cnpj.faturamento),
-            comentarios: cnpj.comentarios || null,
-          }))
+        include: {
+          credenciamentos: true,
+          cnpjsSimulados: true
         }
-      },
-      include: {
-        credenciamentos: true,
-        cnpjsSimulados: true
-      }
-    })
+      })
 
       console.log('Fechamento criado com sucesso:', fechamento.id)
       return NextResponse.json(fechamento, { status: 201 })
