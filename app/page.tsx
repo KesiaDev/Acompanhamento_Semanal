@@ -449,8 +449,8 @@ export default function Home() {
     if (executivo && agencia) {
       const agenciaData = getAgenciaData(executivo, agencia)
       if (agenciaData) {
-        setPorteAgencia(agenciaData.porte || '')
-        setGerentePJ(agenciaData.gerentePJ || '')
+        setPorteAgencia((agenciaData as any).porte || '')
+        setGerentePJ((agenciaData as any).gerentePJ || '')
       }
     } else {
       setPorteAgencia('')
