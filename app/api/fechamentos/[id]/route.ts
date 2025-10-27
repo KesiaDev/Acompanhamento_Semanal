@@ -11,7 +11,7 @@ export async function PUT(
     
     console.log('🔄 API PUT - Atualizando registro:', id)
     
-    const { executivo, agencia, porteAgencia, gerentePJ, qtdVisitas, qtdInteracoes, qtdBraExpre, data, credenciamentos, cnpjsSimulados } = body
+    const { executivo, agencia, qtdVisitas, qtdInteracoes, qtdBraExpre, data, credenciamentos, cnpjsSimulados } = body
     
     console.log('📝 Dados recebidos:', { executivo, agencia, qtdVisitas, qtdInteracoes, qtdBraExpre, data })
 
@@ -58,8 +58,6 @@ export async function PUT(
       data: {
         executivo,
         agencia,
-        porteAgencia: porteAgencia || null,
-        gerentePJ: gerentePJ || null,
         qtdVisitas: parseInt(qtdVisitas),
         qtdInteracoes: parseInt(qtdInteracoes),
         qtdBraExpre: parseInt(qtdBraExpre),
