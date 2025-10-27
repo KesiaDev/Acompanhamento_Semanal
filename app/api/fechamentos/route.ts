@@ -37,7 +37,19 @@ export async function POST(request: NextRequest) {
       cnpj.cnpj.toString().trim() !== '' && cnpj.nomeEmpresa.toString().trim() !== ''
     )
 
-    const fechamento = await prisma.fechamento.create({
+    console.log('Dados antes de criar:', {
+      executivo,
+      agencia,
+      qtdVisitas: parseInt(qtdVisitas),
+      qtdInteracoes: parseInt(qtdInteracoes),
+      qtdBraExpre: parseInt(qtdBraExpre),
+      dataFechamento,
+      credenciamentosCount: credenciamentosValidos.length,
+      cnpjsCount: cnpjsValidos.length
+    })
+
+    try {
+      const fechamento = await prisma.fechamento.create({
       data: {
         gerenteEstadual,
         executivo,
@@ -75,12 +87,20 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json(fechamento, { status: 201 })
+      console.log('Fechamento criado com sucesso:', fechamento.id)
+      return NextResponse.json(fechamento, { status: 201 })
+    } catch (createError) {
+      console.error('Erro ao criar registro no banco:', createError)
+      console.error('Detalhes do erro:', JSON.stringify(createError, Object.getOwnPropertyNames(createError)))
+      throw createError
+    }
   } catch (error) {
     console.error('Erro ao criar fechamento:', error)
-    console.error('Erro completo:', JSON.stringify(error, null, 2))
+    console.error('Erro completo:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido'
+    const errorStack = error instanceof Error ? error.stack : undefined
     return NextResponse.json(
-      { error: 'Erro ao salvar fechamento', details: error instanceof Error ? error.message : 'Erro desconhecido' },
+      { error: 'Erro ao salvar fechamento', details: errorMessage, stack: errorStack },
       { status: 500 }
     )
   }
