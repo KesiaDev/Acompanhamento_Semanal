@@ -56,7 +56,7 @@ export const agenciasPorExecutivo = {
     { codigo: '1619', nome: 'S. Marcos', porte: 'PEQUENA', gerentePJ: 'MARCELO' },
     { codigo: '1778', nome: 'Torres', porte: 'MÉDIA', gerentePJ: 'MARCELO' }
   ],
-  'Cristian': [
+  'Cristian 2': [
     { codigo: '3159', nome: 'Uruguaiana' },
     { codigo: '1635', nome: 'Dom Pedrito' },
     { codigo: '1306', nome: 'Rosário do Sul' },
