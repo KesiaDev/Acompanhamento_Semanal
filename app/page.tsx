@@ -421,7 +421,7 @@ export default function Home() {
 
   const carregarFechamentos = async () => {
     try {
-      const response = await fetch(`/api/fechamentos?filtro=${filtro}&data=${dataFiltro}`)
+      const response = await fetch(`/api/fechamentos?filtro=${filtro}&data=${dataFiltro}&regional=KESIA WEIGE NANDI`)
       const data = await response.json()
       setFechamentos(data)
     } catch (error) {
@@ -431,7 +431,7 @@ export default function Home() {
 
   const carregarRanking = async () => {
     try {
-      const response = await fetch(`/api/fechamentos/ranking?filtro=${filtro}&data=${dataFiltro}`)
+      const response = await fetch(`/api/fechamentos/ranking?filtro=${filtro}&data=${dataFiltro}&regional=KESIA WEIGE NANDI`)
       const data = await response.json()
       setRanking(data)
     } catch (error) {
@@ -547,6 +547,7 @@ export default function Home() {
             gerenteEstadual,
             executivo,
             agencia,
+            regional: 'KESIA WEIGE NANDI',
             porteAgencia,
             gerentePJ,
             qtdVisitas: parseInt(qtdVisitas),
