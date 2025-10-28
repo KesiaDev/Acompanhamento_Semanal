@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-        const { executivo, agencia, qtdVisitas, qtdInteracoes, qtdBraExpre, data, credenciamentos, cnpjsSimulados } = body
+        const { executivo, agencia, regional, qtdVisitas, qtdInteracoes, qtdBraExpre, data, credenciamentos, cnpjsSimulados } = body
 
     // Validação básica
     if (!executivo || !agencia || qtdVisitas === undefined || qtdInteracoes === undefined || qtdBraExpre === undefined) {
@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
         data: {
           executivo,
           agencia,
+          regional: regional || 'KESIA WEIGE NANDI',
           qtdVisitas: parseInt(qtdVisitas),
           qtdInteracoes: parseInt(qtdInteracoes),
           qtdBraExpre: parseInt(qtdBraExpre),
@@ -108,6 +109,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const filtro = searchParams.get('filtro') || 'dia'
     const dataParam = searchParams.get('data')
+    const regional = searchParams.get('regional') || 'KESIA WEIGE NANDI' // Filtrar por regional
     
     const dataReferencia = dataParam ? new Date(dataParam + 'T12:00:00') : new Date(new Date().toISOString().split('T')[0] + 'T12:00:00')
     
@@ -156,6 +158,7 @@ export async function GET(request: NextRequest) {
 
     const fechamentos = await prisma.fechamento.findMany({
       where: {
+        regional: regional, // Filtrar por regional específica
         data: {
           gte: startDate,
           lte: endDate

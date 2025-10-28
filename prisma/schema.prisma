@@ -14,6 +14,7 @@ model Fechamento {
   id                String            @id @default(cuid())
   executivo         String
   agencia           String
+  regional          String            @default("KESIA WEIGE NANDI") // Regional padrão
   qtdVisitas        Int
   qtdInteracoes     Int
   qtdBraExpre       Int
